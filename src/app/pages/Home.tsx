@@ -11,7 +11,8 @@ const Home = () => {
   const [limit] = useState<number>(3);
   const [offset, setOffset] = useState<number>(0);
   const [totalResults, setTotalResults] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false); // Add a loading state
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>(""); // Handle error messages
 
   // Redux state selectors
   const distance = useSelector((state: RootState) => state.search.distance) || "";
@@ -20,22 +21,31 @@ const Home = () => {
   const lat = useSelector((state: RootState) => state.location.lat);
   const lon = useSelector((state: RootState) => state.location.lon);
   
-  // Geolocation hook for additional handling
+  // Geolocation hook
   const { error } = useGeolocation();
 
   const handleSearch = async (isPagination: boolean = false) => {
-    setLoading(true);  // Start loading when search begins
+    setLoading(true); // Start loading when search begins
+    setErrorMessage("");
+    console.log(isPagination)
+    let finalOffset = offset;
     if (!isPagination) {
-      setOffset(0);  // Reset offset on a new search
+      setOffset(0);
+      finalOffset = 0;
     }
 
     let latitude = lat;
     let longitude = lon;
 
+    // Check if latitude and longitude are available, handle accordingly
     if (!latitude || !longitude) {
-      console.error("No geolocation data available");
-      setLoading(false);
-      return;
+      if (error) {
+        setErrorMessage("Geolocation error: " + error);
+        setLoading(false);
+      } else {
+        setErrorMessage("Coordinates are not available.");
+        setLoading(false);
+      }
     }
 
     const dayOrder = new Date().getDay();
@@ -47,7 +57,7 @@ const Home = () => {
       query,
       dayOrder,
       limit,
-      offset,
+      offset : finalOffset,
     };
 
     try {
@@ -55,9 +65,10 @@ const Home = () => {
       setResults(data.payload);
       setTotalResults(data.total);
     } catch (error) {
+      setErrorMessage("Error fetching data. Please try again.");
       console.error("Error fetching data", error);
     } finally {
-      setLoading(false);  // Stop loading after data is fetched
+      setLoading(false); // Stop loading after data is fetched
     }
   };
 
@@ -65,7 +76,7 @@ const Home = () => {
     const newOffset = offset + limit;
     if (newOffset < totalResults) {
       setOffset(newOffset);
-      handleSearch(true);  // Pass true to indicate pagination
+      handleSearch(true); // Pass true to indicate pagination
     }
   };
 
@@ -73,16 +84,19 @@ const Home = () => {
     const newOffset = offset - limit;
     if (newOffset >= 0) {
       setOffset(newOffset);
-      handleSearch(true);  // Pass true to indicate pagination
+      handleSearch(true); // Pass true to indicate pagination
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-8">
       <h1 className="text-4xl font-bold text-gray-800 mb-8">Search Food Trucks</h1>
-      
+
       {/* Search Form */}
-      <SearchForm onSearch={ () => handleSearch} />
+      <SearchForm onSearch={() => handleSearch(false)} />
+
+      {/* Display error message if there's an issue */}
+      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 
       {/* Show Loader when loading is true */}
       {loading ? (
