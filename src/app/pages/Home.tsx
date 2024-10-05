@@ -83,7 +83,7 @@ const Home = () => {
       <h1 className="text-4xl font-bold text-gray-800 mb-8">Search Food Trucks</h1>
       
       {/* Search Form */}
-      <SearchForm onSearch={handleSearch} />
+      <SearchForm onSearch={ () => handleSearch} />
 
       {/* Show Loader when loading is true */}
       {loading ? (
