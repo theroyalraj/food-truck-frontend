@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import SearchForm from "../components/SearchForm";
-import PaginationControls from "../components/PaginationControls";
 import FoodTruckCard from "../components/FoodTruckCard";
 import { searchFoodTrucks } from "../../services/api";
 import { RootState } from "../store";
@@ -9,7 +8,7 @@ import { useGeolocation } from "../../hooks/useGeolocation";
 
 const Home = () => {
   const [results, setResults] = useState<any[]>([]);
-  const [limit, setLimit] = useState<number>(3);
+  const [limit] = useState<number>(3);
   const [offset, setOffset] = useState<number>(0);
   const [totalResults, setTotalResults] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false); // Add a loading state

@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
-import { setLat, setLon, clearLocation } from "../features/locationSlice";
+import { setLat, setLon } from "../features/locationSlice";
 import { setDistanceRedux, setUnit, setQuery} from "../features/searchSlice";
 
 
