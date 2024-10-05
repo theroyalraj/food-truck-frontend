@@ -1,13 +1,26 @@
 import { useState } from "react";
 
-const FoodTruckCard = ({ foodTruck }) => {
+// Define the FoodTruck interface
+interface FoodTruck {
+  id: string;
+  applicant: string;
+  dayOfWeekStr: string;
+  startTime: string;
+  endTime: string;
+  permitLocation: string;
+  optionalText: string;
+  coordinates: [number, number];
+  createdAt: string;
+}
+
+const FoodTruckCard: React.FC<{ foodTruck: FoodTruck }> = ({ foodTruck }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const textLimit = 200; // Limit for the initial characters shown
+  const textLimit = 100; // Limit for the initial characters shown
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 transition-transform">
@@ -23,7 +36,7 @@ const FoodTruckCard = ({ foodTruck }) => {
           ? foodTruck.optionalText // Show full text if expanded
           : `${foodTruck.optionalText.substring(0, textLimit)}...`} {/* Show limited text */}
       </p>
-      {foodTruck.optionalText.length >= textLimit && (
+      {foodTruck.optionalText.length > textLimit && (
         <a
           href="#"
           onClick={(e) => { 
@@ -36,12 +49,12 @@ const FoodTruckCard = ({ foodTruck }) => {
         </a>
       )}
 
-      {/* <div className="text-sm text-gray-500 mt-4">
+      <div className="text-sm text-gray-500 mt-4">
         <strong>Coordinates:</strong> ({foodTruck.coordinates[1]}, {foodTruck.coordinates[0]})
       </div>
       <div className="text-sm text-gray-500 mt-2">
         <strong>Created At:</strong> {new Date(foodTruck.createdAt).toLocaleString()}
-      </div> */}
+      </div>
 
       <div className="mt-4">
         <a
