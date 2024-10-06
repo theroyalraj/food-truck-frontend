@@ -64,3 +64,11 @@ Geolocation functionality works locally but requires SSL to function correctly i
  **Backend Deployment**
 The backend for this application is deployed using Spring Boot on Docker and is accessible at the following URL:
 To view the backend repository and learn more about the API, visit https://theroyalraj-locator-backend.sliplane.app/api the GitHub repository https://github.com/theroyalraj/locator.git.
+
+
+
+#### Developer Details
+
+- ***Name***: Utkarsh Raj
+- ***Email***: raj.utkarsh001@gmail.com
+- ***LinkedIn***: https://www.linkedin.com/in/theroyalraj/
